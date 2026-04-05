@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { he } from "date-fns/locale";
-import { Plus, Pencil, Menu } from "lucide-react";
+import { Plus, Pencil, Trash2, Menu } from "lucide-react";
 import Calendar, { CalendarEvent } from "./Calendar";
 import EventModal from "./EventModal";
 
@@ -34,6 +34,7 @@ export default function Dashboard() {
   const [showModal, setShowModal] = useState(false);
   const [editingEvent, setEditingEvent] = useState<CalendarEvent | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
   useEffect(() => {
     setEvents(loadEvents());
@@ -155,24 +156,54 @@ export default function Dashboard() {
               ) : (
                 <div className="space-y-2">
                   {selectedDateEvents.map((event) => (
-                    <button
-                      key={event.id}
-                      onClick={() => openEditEvent(event)}
-                      className="w-full bg-neutral-900 rounded-xl p-4 flex items-start justify-between text-right active:bg-neutral-800 transition-colors"
-                    >
-                      <div className="flex items-start gap-3 flex-1 min-w-0">
-                        <span className="text-xs text-neutral-500 font-mono w-12 pt-0.5 shrink-0">
-                          {event.time}
-                        </span>
-                        <div className="min-w-0">
-                          <span className="text-sm block">{event.title}</span>
-                          {event.description && (
-                            <span className="text-xs text-neutral-500 block mt-0.5">{event.description}</span>
-                          )}
+                    <div key={event.id}>
+                      <div className="bg-neutral-900 rounded-xl p-4 flex items-center justify-between">
+                        <div className="flex items-center gap-3 flex-1 min-w-0">
+                          <span className="text-xs text-neutral-500 font-mono w-12 shrink-0">
+                            {event.time}
+                          </span>
+                          <div className="min-w-0">
+                            <span className="text-sm block">{event.title}</span>
+                            {event.description && (
+                              <span className="text-xs text-neutral-500 block mt-0.5">{event.description}</span>
+                            )}
+                          </div>
+                        </div>
+                        <div className="flex gap-1.5 shrink-0">
+                          <button
+                            onClick={() => openEditEvent(event)}
+                            className="w-9 h-9 rounded-lg bg-neutral-800 flex items-center justify-center active:bg-neutral-700 transition-colors"
+                          >
+                            <Pencil className="w-3.5 h-3.5 text-neutral-400" />
+                          </button>
+                          <button
+                            onClick={() => setConfirmDeleteId(event.id)}
+                            className="w-9 h-9 rounded-lg bg-red-500/15 flex items-center justify-center active:bg-red-500/25 transition-colors"
+                          >
+                            <Trash2 className="w-3.5 h-3.5 text-red-400" />
+                          </button>
                         </div>
                       </div>
-                      <Pencil className="w-3.5 h-3.5 text-neutral-600 shrink-0 mt-0.5" />
-                    </button>
+                      {confirmDeleteId === event.id && (
+                        <div className="flex gap-2 mt-1.5">
+                          <button
+                            onClick={() => {
+                              deleteEvent(event.id);
+                              setConfirmDeleteId(null);
+                            }}
+                            className="flex-1 bg-red-500 text-white text-xs font-medium rounded-lg py-2 active:scale-[0.98] transition-all"
+                          >
+                            מחק
+                          </button>
+                          <button
+                            onClick={() => setConfirmDeleteId(null)}
+                            className="flex-1 bg-neutral-800 text-neutral-400 text-xs font-medium rounded-lg py-2 active:scale-[0.98] transition-all"
+                          >
+                            ביטול
+                          </button>
+                        </div>
+                      )}
+                    </div>
                   ))}
                 </div>
               )}
