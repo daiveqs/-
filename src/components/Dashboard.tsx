@@ -234,8 +234,7 @@ export default function Dashboard() {
             setEditingEvent(null);
           }}
           onSave={handleSave}
-          onDelete={editingEvent ? () => deleteEvent(editingEvent.id) : undefined}
-        />
+/>
       )}
     </div>
   );

@@ -10,20 +10,18 @@ interface EventModalProps {
   editingEvent?: CalendarEvent | null;
   onClose: () => void;
   onSave: (event: { title: string; description: string; date: string; time: string }) => void;
-  onDelete?: () => void;
 }
 
 const HOURS = Array.from({ length: 24 }, (_, i) => i.toString().padStart(2, "0"));
 const MINUTES = ["00", "05", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55"];
 
-export default function EventModal({ date, editingEvent, onClose, onSave, onDelete }: EventModalProps) {
+export default function EventModal({ date, editingEvent, onClose, onSave }: EventModalProps) {
   const eventDate = editingEvent?.date ?? date.toISOString().split("T")[0];
 
   const [title, setTitle] = useState(editingEvent?.title ?? "");
   const [description, setDescription] = useState(editingEvent?.description ?? "");
   const [hour, setHour] = useState(editingEvent ? editingEvent.time.split(":")[0] : "09");
   const [minute, setMinute] = useState(editingEvent ? editingEvent.time.split(":")[1] : "00");
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -93,39 +91,6 @@ export default function EventModal({ date, editingEvent, onClose, onSave, onDele
             שמור
           </button>
 
-          {editingEvent && onDelete && (
-            <>
-              {!showDeleteConfirm ? (
-                <button
-                  type="button"
-                  onClick={() => setShowDeleteConfirm(true)}
-                  className="w-full border border-neutral-700 text-red-400 font-medium rounded-xl py-3.5 text-sm tracking-wide transition-all active:scale-[0.98] active:bg-neutral-800"
-                >
-                  מחק אירוע
-                </button>
-              ) : (
-                <div className="flex gap-2">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      onDelete();
-                      onClose();
-                    }}
-                    className="flex-1 bg-red-500 text-white font-medium rounded-xl py-3.5 text-sm transition-all active:scale-[0.98]"
-                  >
-                    אישור מחיקה
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setShowDeleteConfirm(false)}
-                    className="flex-1 border border-neutral-700 text-neutral-400 font-medium rounded-xl py-3.5 text-sm transition-all active:scale-[0.98]"
-                  >
-                    ביטול
-                  </button>
-                </div>
-              )}
-            </>
-          )}
         </form>
       </div>
     </div>
