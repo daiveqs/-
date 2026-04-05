@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { X } from "lucide-react";
+import ScrollPicker from "./ScrollPicker";
 
 interface EventModalProps {
   date: Date;
@@ -10,7 +11,7 @@ interface EventModalProps {
 }
 
 const HOURS = Array.from({ length: 24 }, (_, i) => i.toString().padStart(2, "0"));
-const MINUTES = ["00", "15", "30", "45"];
+const MINUTES = Array.from({ length: 60 }, (_, i) => i.toString().padStart(2, "0"));
 
 export default function EventModal({ date, onClose, onSave }: EventModalProps) {
   const eventDate = date.toISOString().split("T")[0];
@@ -67,44 +68,16 @@ export default function EventModal({ date, onClose, onSave }: EventModalProps) {
             />
           </div>
 
-          {/* Time picker */}
+          {/* Time picker - iPhone style */}
           <div>
             <label className="text-xs text-neutral-400 mb-1.5 block">שעה</label>
-            <div className="flex items-center gap-3">
-              {/* Hour selector */}
-              <div className="flex-1 bg-neutral-800 border border-neutral-700 rounded-xl overflow-hidden">
-                <div className="flex overflow-x-auto py-2 px-1 gap-1 scrollbar-hide">
-                  {HOURS.map((h) => (
-                    <button
-                      key={h}
-                      type="button"
-                      onClick={() => setHour(h)}
-                      className={`shrink-0 w-10 h-10 rounded-lg text-sm flex items-center justify-center transition-colors
-                        ${hour === h ? "bg-white text-black font-medium" : "text-neutral-400 active:bg-neutral-700"}`}
-                    >
-                      {h}
-                    </button>
-                  ))}
-                </div>
+            <div className="flex items-center gap-2 bg-neutral-800 border border-neutral-700 rounded-xl overflow-hidden">
+              <div className="flex-1">
+                <ScrollPicker items={HOURS} value={hour} onChange={setHour} />
               </div>
-
-              <span className="text-neutral-500 text-lg">:</span>
-
-              {/* Minute selector */}
-              <div className="bg-neutral-800 border border-neutral-700 rounded-xl overflow-hidden">
-                <div className="flex py-2 px-1 gap-1">
-                  {MINUTES.map((m) => (
-                    <button
-                      key={m}
-                      type="button"
-                      onClick={() => setMinute(m)}
-                      className={`shrink-0 w-10 h-10 rounded-lg text-sm flex items-center justify-center transition-colors
-                        ${minute === m ? "bg-white text-black font-medium" : "text-neutral-400 active:bg-neutral-700"}`}
-                    >
-                      {m}
-                    </button>
-                  ))}
-                </div>
+              <span className="text-2xl font-light text-neutral-500">:</span>
+              <div className="flex-1">
+                <ScrollPicker items={MINUTES} value={minute} onChange={setMinute} />
               </div>
             </div>
           </div>
