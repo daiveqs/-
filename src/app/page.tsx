@@ -32,11 +32,8 @@ export default function LoginPage() {
   return (
     <div className="flex items-center justify-center min-h-screen px-6">
       <div className="w-full max-w-[260px] flex flex-col items-center gap-8">
-        <div className="relative">
-          <div className="absolute -inset-4 rounded-full bg-white/5 blur-xl" />
-          <div className="relative w-16 h-16 rounded-full border border-neutral-700 flex items-center justify-center backdrop-blur-sm">
-            <Lock className="w-5 h-5 text-neutral-400" strokeWidth={1.5} />
-          </div>
+        <div className="w-16 h-16 rounded-full border border-neutral-700 flex items-center justify-center">
+          <Lock className="w-5 h-5 text-neutral-400" strokeWidth={1.5} />
         </div>
 
         <form onSubmit={handleSubmit} className="w-full space-y-3">
@@ -48,7 +45,7 @@ export default function LoginPage() {
               setCode(e.target.value);
               setError(false);
             }}
-            placeholder="- - - -"
+            placeholder=""
             className={`w-full bg-white/5 backdrop-blur-sm border rounded-xl px-4 py-3.5 text-center text-lg tracking-[0.5em] outline-none transition-all placeholder:tracking-[0.3em] placeholder:text-neutral-600
               ${error
                 ? "border-red-500/50"
