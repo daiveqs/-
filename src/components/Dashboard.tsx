@@ -26,11 +26,22 @@ export default function Dashboard() {
   const [events, setEvents] = useState<CalendarEvent[]>([]);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [showModal, setShowModal] = useState(false);
-  const [showMenu, setShowMenu] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [menuVisible, setMenuVisible] = useState(false);
 
   useEffect(() => {
     setEvents(loadEvents());
   }, []);
+
+  function openMenu() {
+    setMenuVisible(true);
+    requestAnimationFrame(() => setMenuOpen(true));
+  }
+
+  function closeMenu() {
+    setMenuOpen(false);
+    setTimeout(() => setMenuVisible(false), 300);
+  }
 
   function addEvent(event: { title: string; description: string; date: string; time: string }) {
     const newEvent: CalendarEvent = {
@@ -59,7 +70,7 @@ export default function Dashboard() {
       {/* Header */}
       <header className="flex items-center justify-between px-5 pt-4 pb-2">
         <button
-          onClick={() => setShowMenu(true)}
+          onClick={openMenu}
           className="w-10 h-10 rounded-xl flex items-center justify-center active:bg-neutral-900 transition-colors"
         >
           <Menu className="w-5 h-5" strokeWidth={1.5} />
@@ -74,14 +85,19 @@ export default function Dashboard() {
       </header>
 
       {/* Hamburger menu overlay */}
-      {showMenu && (
+      {menuVisible && (
         <div className="fixed inset-0 z-50">
-          <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={() => setShowMenu(false)} />
-          <div className="absolute top-0 right-0 h-full w-64 bg-neutral-950 border-l border-neutral-800 p-6 animate-[slideRight_0.25s_ease-out]">
+          <div
+            className={`absolute inset-0 bg-black/70 backdrop-blur-sm transition-opacity duration-300 ${menuOpen ? "opacity-100" : "opacity-0"}`}
+            onClick={closeMenu}
+          />
+          <div
+            className={`absolute top-0 right-0 h-full w-64 bg-neutral-950 border-l border-neutral-800 p-6 transition-transform duration-300 ease-out ${menuOpen ? "translate-x-0" : "translate-x-full"}`}
+          >
             <div className="flex items-center justify-between mb-8">
               <h2 className="text-sm font-semibold text-neutral-400">תפריט</h2>
               <button
-                onClick={() => setShowMenu(false)}
+                onClick={closeMenu}
                 className="w-8 h-8 rounded-lg flex items-center justify-center active:bg-neutral-800"
               >
                 <X className="w-4 h-4" />
@@ -97,7 +113,7 @@ export default function Dashboard() {
                   key={tab.id}
                   onClick={() => {
                     setActiveTab(tab.id);
-                    setShowMenu(false);
+                    closeMenu();
                   }}
                   className={`w-full text-right px-4 py-3 rounded-xl text-sm transition-colors
                     ${activeTab === tab.id ? "bg-white text-black font-medium" : "text-neutral-400 active:bg-neutral-900"}`}
