@@ -2,13 +2,14 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "MyDashboard",
+  title: "-",
   description: "Personal management dashboard",
   manifest: "/manifest.json",
+  icons: { icon: "/favicon.svg" },
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "MyDashboard",
+    title: "-",
   },
 };
 
