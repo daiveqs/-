@@ -14,7 +14,7 @@ interface EventModalProps {
 }
 
 const HOURS = Array.from({ length: 24 }, (_, i) => i.toString().padStart(2, "0"));
-const MINUTES = Array.from({ length: 60 }, (_, i) => i.toString().padStart(2, "0"));
+const MINUTES = ["00", "05", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55"];
 
 export default function EventModal({ date, editingEvent, onClose, onSave, onDelete }: EventModalProps) {
   const eventDate = editingEvent?.date ?? date.toISOString().split("T")[0];
@@ -75,11 +75,11 @@ export default function EventModal({ date, editingEvent, onClose, onSave, onDele
           {/* Time picker - iPhone style */}
           <div>
             <label className="text-xs text-neutral-400 mb-1.5 block">שעה</label>
-            <div className="flex items-center gap-2 bg-neutral-800 border border-neutral-700 rounded-xl overflow-hidden">
+            <div className="flex items-center bg-neutral-900 rounded-xl overflow-hidden">
               <div className="flex-1">
                 <ScrollPicker items={HOURS} value={hour} onChange={setHour} />
               </div>
-              <span className="text-2xl font-light text-neutral-500">:</span>
+              <span className="text-lg text-neutral-500 px-1">:</span>
               <div className="flex-1">
                 <ScrollPicker items={MINUTES} value={minute} onChange={setMinute} />
               </div>

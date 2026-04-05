@@ -52,7 +52,7 @@ export default function Calendar({ events, selectedDate, onSelectDate }: Calenda
       {/* Month header */}
       <div className="flex items-center justify-between mb-4 px-1">
         <button
-          onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}
+          onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}
           className="w-9 h-9 rounded-xl bg-neutral-900 flex items-center justify-center active:bg-neutral-800 transition-colors"
         >
           <ChevronRight className="w-4 h-4" />
@@ -61,7 +61,7 @@ export default function Calendar({ events, selectedDate, onSelectDate }: Calenda
           {format(currentMonth, "MMMM yyyy", { locale: he })}
         </h2>
         <button
-          onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}
+          onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}
           className="w-9 h-9 rounded-xl bg-neutral-900 flex items-center justify-center active:bg-neutral-800 transition-colors"
         >
           <ChevronLeft className="w-4 h-4" />
