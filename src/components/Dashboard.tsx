@@ -3,11 +3,17 @@
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { he } from "date-fns/locale";
-import { Plus, Trash2, Menu, X } from "lucide-react";
+import { Plus, Trash2, Menu } from "lucide-react";
 import Calendar, { CalendarEvent } from "./Calendar";
 import EventModal from "./EventModal";
 
 type TabId = "general" | "training" | "finance";
+
+const TABS: { id: TabId; label: string }[] = [
+  { id: "general", label: "כללי" },
+  { id: "training", label: "אימונים" },
+  { id: "finance", label: "כספים" },
+];
 
 const STORAGE_KEY = "dashboard-events";
 
@@ -27,21 +33,10 @@ export default function Dashboard() {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [showModal, setShowModal] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [menuVisible, setMenuVisible] = useState(false);
 
   useEffect(() => {
     setEvents(loadEvents());
   }, []);
-
-  function openMenu() {
-    setMenuVisible(true);
-    requestAnimationFrame(() => setMenuOpen(true));
-  }
-
-  function closeMenu() {
-    setMenuOpen(false);
-    setTimeout(() => setMenuVisible(false), 300);
-  }
 
   function addEvent(event: { title: string; description: string; date: string; time: string }) {
     const newEvent: CalendarEvent = {
@@ -59,7 +54,7 @@ export default function Dashboard() {
     saveEvents(updated);
   }
 
-  const tabLabel = activeTab === "general" ? "כללי" : activeTab === "training" ? "אימונים" : "כספים";
+  const tabLabel = TABS.find((t) => t.id === activeTab)!.label;
 
   const selectedDateEvents = events
     .filter((e) => e.date === format(selectedDate, "yyyy-MM-dd"))
@@ -70,7 +65,7 @@ export default function Dashboard() {
       {/* Header */}
       <header className="flex items-center justify-between px-5 pt-4 pb-2">
         <button
-          onClick={openMenu}
+          onClick={() => setMenuOpen(!menuOpen)}
           className="w-10 h-10 rounded-xl flex items-center justify-center active:bg-neutral-900 transition-colors"
         >
           <Menu className="w-5 h-5" strokeWidth={1.5} />
@@ -84,47 +79,31 @@ export default function Dashboard() {
         </button>
       </header>
 
-      {/* Hamburger menu overlay */}
-      {menuVisible && (
-        <div className="fixed inset-0 z-50">
-          <div
-            className={`absolute inset-0 bg-black/70 backdrop-blur-sm transition-opacity duration-300 ${menuOpen ? "opacity-100" : "opacity-0"}`}
-            onClick={closeMenu}
-          />
-          <div
-            className={`absolute top-0 right-0 h-full w-64 bg-neutral-950 border-l border-neutral-800 p-6 transition-transform duration-300 ease-out ${menuOpen ? "translate-x-0" : "translate-x-full"}`}
-          >
-            <div className="flex items-center justify-between mb-8">
-              <h2 className="text-sm font-semibold text-neutral-400">תפריט</h2>
-              <button
-                onClick={closeMenu}
-                className="w-8 h-8 rounded-lg flex items-center justify-center active:bg-neutral-800"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-            <div className="space-y-1">
-              {([
-                { id: "general" as TabId, label: "כללי" },
-                { id: "training" as TabId, label: "אימונים" },
-                { id: "finance" as TabId, label: "כספים" },
-              ]).map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => {
-                    setActiveTab(tab.id);
-                    closeMenu();
-                  }}
-                  className={`w-full text-right px-4 py-3 rounded-xl text-sm transition-colors
-                    ${activeTab === tab.id ? "bg-white text-black font-medium" : "text-neutral-400 active:bg-neutral-900"}`}
-                >
-                  {tab.label}
-                </button>
-              ))}
-            </div>
-          </div>
+      {/* Inline menu - expands in place */}
+      <div
+        className={`overflow-hidden transition-all duration-200 ease-out ${
+          menuOpen ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
+        }`}
+      >
+        <div className="flex gap-2 px-5 pb-3">
+          {TABS.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => {
+                setActiveTab(tab.id);
+                setMenuOpen(false);
+              }}
+              className={`px-4 py-2 rounded-xl text-sm transition-all duration-150
+                ${activeTab === tab.id
+                  ? "bg-white text-black font-medium"
+                  : "bg-neutral-900 text-neutral-400 active:bg-neutral-800"
+                }`}
+            >
+              {tab.label}
+            </button>
+          ))}
         </div>
-      )}
+      </div>
 
       {/* Content */}
       <main className="flex-1 px-5 pb-8 overflow-y-auto">
