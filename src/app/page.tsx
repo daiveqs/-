@@ -38,7 +38,7 @@ export default function LoginPage() {
     <div className="flex items-center justify-center min-h-screen px-6">
       <div className="w-full max-w-[280px]">
         <div className="flex justify-center mb-10">
-          <div className="w-14 h-14 rounded-full border border-neutral-200 dark:border-neutral-800 flex items-center justify-center">
+          <div className="w-14 h-14 rounded-full border border-neutral-800 flex items-center justify-center">
             <Lock className="w-5 h-5" strokeWidth={1.5} />
           </div>
         </div>
@@ -56,8 +56,8 @@ export default function LoginPage() {
               placeholder="קוד"
               className={`w-full bg-transparent border-b py-3 text-center text-lg tracking-[0.3em] outline-none transition-all
                 ${error
-                  ? "border-neutral-900 dark:border-neutral-100"
-                  : "border-neutral-200 dark:border-neutral-800 focus:border-neutral-900 dark:focus:border-neutral-100"
+                  ? "border-white"
+                  : "border-neutral-800 focus:border-white"
                 }`}
               autoFocus
             />
@@ -71,8 +71,8 @@ export default function LoginPage() {
 
           <button
             type="submit"
-            className="w-full border border-neutral-200 dark:border-neutral-800 rounded-full py-3 text-sm tracking-wide
-              active:bg-black active:text-white dark:active:bg-white dark:active:text-black
+            className="w-full border border-neutral-800 rounded-full py-3 text-sm tracking-wide
+              active:bg-white active:text-black
               transition-all duration-150"
           >
             כניסה

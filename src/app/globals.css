@@ -1,11 +1,6 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #000000;
-}
-
-.dark {
   --background: #000000;
   --foreground: #ffffff;
 }
@@ -22,6 +17,6 @@ input::placeholder {
   color: #a0a0a0;
 }
 
-.dark input::placeholder {
+input::placeholder {
   color: #555555;
 }

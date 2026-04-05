@@ -18,19 +18,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="he" dir="rtl" suppressHydrationWarning>
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                var theme = localStorage.getItem('theme');
-                if (theme === 'dark') document.documentElement.classList.add('dark');
-              })();
-            `,
-          }}
-        />
-      </head>
+    <html lang="he" dir="rtl">
       <body className="min-h-screen">{children}</body>
     </html>
   );
