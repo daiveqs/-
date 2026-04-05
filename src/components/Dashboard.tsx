@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { he } from "date-fns/locale";
-import { Plus, Trash2, Menu } from "lucide-react";
+import { Plus, Pencil, Menu } from "lucide-react";
 import Calendar, { CalendarEvent } from "./Calendar";
 import EventModal from "./EventModal";
 
@@ -32,6 +32,7 @@ export default function Dashboard() {
   const [events, setEvents] = useState<CalendarEvent[]>([]);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [showModal, setShowModal] = useState(false);
+  const [editingEvent, setEditingEvent] = useState<CalendarEvent | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -48,10 +49,34 @@ export default function Dashboard() {
     saveEvents(updated);
   }
 
+  function updateEvent(id: string, event: { title: string; description: string; date: string; time: string }) {
+    const updated = events.map((e) => (e.id === id ? { ...e, ...event } : e));
+    setEvents(updated);
+    saveEvents(updated);
+  }
+
   function deleteEvent(id: string) {
     const updated = events.filter((e) => e.id !== id);
     setEvents(updated);
     saveEvents(updated);
+  }
+
+  function openNewEvent() {
+    setEditingEvent(null);
+    setShowModal(true);
+  }
+
+  function openEditEvent(event: CalendarEvent) {
+    setEditingEvent(event);
+    setShowModal(true);
+  }
+
+  function handleSave(event: { title: string; description: string; date: string; time: string }) {
+    if (editingEvent) {
+      updateEvent(editingEvent.id, event);
+    } else {
+      addEvent(event);
+    }
   }
 
   const tabLabel = TABS.find((t) => t.id === activeTab)!.label;
@@ -72,7 +97,7 @@ export default function Dashboard() {
         </button>
         <h1 className="text-base font-semibold">{tabLabel}</h1>
         <button
-          onClick={() => setShowModal(true)}
+          onClick={openNewEvent}
           className="w-10 h-10 rounded-xl bg-white text-black flex items-center justify-center active:scale-95 transition-transform"
         >
           <Plus className="w-5 h-5" strokeWidth={2} />
@@ -130,9 +155,10 @@ export default function Dashboard() {
               ) : (
                 <div className="space-y-2">
                   {selectedDateEvents.map((event) => (
-                    <div
+                    <button
                       key={event.id}
-                      className="bg-neutral-900 rounded-xl p-4 flex items-start justify-between"
+                      onClick={() => openEditEvent(event)}
+                      className="w-full bg-neutral-900 rounded-xl p-4 flex items-start justify-between text-right active:bg-neutral-800 transition-colors"
                     >
                       <div className="flex items-start gap-3 flex-1 min-w-0">
                         <span className="text-xs text-neutral-500 font-mono w-12 pt-0.5 shrink-0">
@@ -145,13 +171,8 @@ export default function Dashboard() {
                           )}
                         </div>
                       </div>
-                      <button
-                        onClick={() => deleteEvent(event.id)}
-                        className="text-neutral-600 active:text-red-400 transition-colors p-1 shrink-0"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
+                      <Pencil className="w-3.5 h-3.5 text-neutral-600 shrink-0 mt-0.5" />
+                    </button>
                   ))}
                 </div>
               )}
@@ -176,8 +197,13 @@ export default function Dashboard() {
       {showModal && (
         <EventModal
           date={selectedDate}
-          onClose={() => setShowModal(false)}
-          onSave={addEvent}
+          editingEvent={editingEvent}
+          onClose={() => {
+            setShowModal(false);
+            setEditingEvent(null);
+          }}
+          onSave={handleSave}
+          onDelete={editingEvent ? () => deleteEvent(editingEvent.id) : undefined}
         />
       )}
     </div>
