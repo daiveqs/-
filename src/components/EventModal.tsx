@@ -16,7 +16,8 @@ const HOURS = Array.from({ length: 24 }, (_, i) => i.toString().padStart(2, "0")
 const MINUTES = ["00", "05", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55"];
 
 export default function EventModal({ date, editingEvent, onClose, onSave }: EventModalProps) {
-  const eventDate = editingEvent?.date ?? date.toISOString().split("T")[0];
+  const eventDate = editingEvent?.date ??
+    `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
 
   const [title, setTitle] = useState(editingEvent?.title ?? "");
   const [description, setDescription] = useState(editingEvent?.description ?? "");
