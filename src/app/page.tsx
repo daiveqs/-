@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Lock } from "lucide-react";
+import Dashboard from "@/components/Dashboard";
 
 const ACCESS_CODE = "1";
 
@@ -22,11 +23,7 @@ export default function LoginPage() {
   }
 
   if (authenticated) {
-    return (
-      <div className="flex items-center justify-center min-h-screen px-6">
-        <p className="text-sm text-neutral-500">בבנייה...</p>
-      </div>
-    );
+    return <Dashboard />;
   }
 
   return (
