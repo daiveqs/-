@@ -79,31 +79,33 @@ export default function Dashboard() {
         </button>
       </header>
 
-      {/* Inline menu - expands in place */}
-      <div
-        className={`overflow-hidden transition-all duration-200 ease-out ${
-          menuOpen ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
-        }`}
-      >
-        <div className="flex gap-2 px-5 pb-3">
-          {TABS.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => {
-                setActiveTab(tab.id);
-                setMenuOpen(false);
-              }}
-              className={`px-4 py-2 rounded-xl text-sm transition-all duration-150
-                ${activeTab === tab.id
-                  ? "bg-white text-black font-medium"
-                  : "bg-neutral-900 text-neutral-400 active:bg-neutral-800"
-                }`}
-            >
-              {tab.label}
-            </button>
-          ))}
+      {/* Menu overlay */}
+      {menuOpen && (
+        <div className="fixed inset-0 z-50" onClick={() => setMenuOpen(false)}>
+          <div className="absolute inset-0 bg-black/50 animate-[fadeIn_150ms_ease-out]" />
+          <div className="absolute top-0 right-0 h-full w-56 bg-neutral-950 p-5 pt-6 animate-[slideIn_150ms_ease-out]">
+            <div className="space-y-1">
+              {TABS.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setActiveTab(tab.id);
+                    setMenuOpen(false);
+                  }}
+                  className={`w-full text-right px-4 py-3 rounded-xl text-sm transition-colors
+                    ${activeTab === tab.id
+                      ? "bg-white text-black font-medium"
+                      : "text-neutral-400 active:bg-neutral-900"
+                    }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Content */}
       <main className="flex-1 px-5 pb-8 overflow-y-auto">
