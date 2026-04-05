@@ -4,33 +4,39 @@ import { useState } from "react";
 import { X } from "lucide-react";
 
 interface EventModalProps {
-  date: Date | null;
+  date: Date;
   onClose: () => void;
-  onSave: (event: { title: string; date: string; time: string }) => void;
+  onSave: (event: { title: string; description: string; date: string; time: string }) => void;
 }
 
+const HOURS = Array.from({ length: 24 }, (_, i) => i.toString().padStart(2, "0"));
+const MINUTES = ["00", "15", "30", "45"];
+
 export default function EventModal({ date, onClose, onSave }: EventModalProps) {
-  const defaultDate = date
-    ? date.toISOString().split("T")[0]
-    : new Date().toISOString().split("T")[0];
+  const eventDate = date.toISOString().split("T")[0];
 
   const [title, setTitle] = useState("");
-  const [eventDate, setEventDate] = useState(defaultDate);
-  const [time, setTime] = useState("09:00");
+  const [description, setDescription] = useState("");
+  const [hour, setHour] = useState("09");
+  const [minute, setMinute] = useState("00");
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!title.trim()) return;
-    onSave({ title: title.trim(), date: eventDate, time });
+    onSave({
+      title: title.trim(),
+      description: description.trim(),
+      date: eventDate,
+      time: `${hour}:${minute}`,
+    });
     onClose();
   }
 
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center">
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
+      <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
       <div className="relative w-full max-w-lg bg-neutral-900 rounded-t-2xl p-6 pb-10 animate-[slideUp_0.3s_ease-out]">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-lg font-semibold">אירוע חדש</h2>
+        <div className="flex items-center justify-end mb-6">
           <button
             onClick={onClose}
             className="w-8 h-8 rounded-lg bg-neutral-800 flex items-center justify-center active:bg-neutral-700"
@@ -46,30 +52,60 @@ export default function EventModal({ date, onClose, onSave }: EventModalProps) {
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="למשל: פגישה עם דני"
-              className="w-full bg-neutral-800 border border-neutral-700 rounded-xl px-4 py-3 text-sm outline-none focus:border-neutral-500 transition-colors placeholder:text-neutral-600"
+              className="w-full bg-neutral-800 border border-neutral-700 rounded-xl px-4 py-3 text-sm outline-none focus:border-neutral-500 transition-colors"
               autoFocus
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="text-xs text-neutral-400 mb-1.5 block">תאריך</label>
-              <input
-                type="date"
-                value={eventDate}
-                onChange={(e) => setEventDate(e.target.value)}
-                className="w-full bg-neutral-800 border border-neutral-700 rounded-xl px-4 py-3 text-sm outline-none focus:border-neutral-500 transition-colors [color-scheme:dark]"
-              />
-            </div>
-            <div>
-              <label className="text-xs text-neutral-400 mb-1.5 block">שעה</label>
-              <input
-                type="time"
-                value={time}
-                onChange={(e) => setTime(e.target.value)}
-                className="w-full bg-neutral-800 border border-neutral-700 rounded-xl px-4 py-3 text-sm outline-none focus:border-neutral-500 transition-colors [color-scheme:dark]"
-              />
+          <div>
+            <label className="text-xs text-neutral-400 mb-1.5 block">תיאור</label>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              rows={2}
+              className="w-full bg-neutral-800 border border-neutral-700 rounded-xl px-4 py-3 text-sm outline-none focus:border-neutral-500 transition-colors resize-none"
+            />
+          </div>
+
+          {/* Time picker */}
+          <div>
+            <label className="text-xs text-neutral-400 mb-1.5 block">שעה</label>
+            <div className="flex items-center gap-3">
+              {/* Hour selector */}
+              <div className="flex-1 bg-neutral-800 border border-neutral-700 rounded-xl overflow-hidden">
+                <div className="flex overflow-x-auto py-2 px-1 gap-1 scrollbar-hide">
+                  {HOURS.map((h) => (
+                    <button
+                      key={h}
+                      type="button"
+                      onClick={() => setHour(h)}
+                      className={`shrink-0 w-10 h-10 rounded-lg text-sm flex items-center justify-center transition-colors
+                        ${hour === h ? "bg-white text-black font-medium" : "text-neutral-400 active:bg-neutral-700"}`}
+                    >
+                      {h}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <span className="text-neutral-500 text-lg">:</span>
+
+              {/* Minute selector */}
+              <div className="bg-neutral-800 border border-neutral-700 rounded-xl overflow-hidden">
+                <div className="flex py-2 px-1 gap-1">
+                  {MINUTES.map((m) => (
+                    <button
+                      key={m}
+                      type="button"
+                      onClick={() => setMinute(m)}
+                      className={`shrink-0 w-10 h-10 rounded-lg text-sm flex items-center justify-center transition-colors
+                        ${minute === m ? "bg-white text-black font-medium" : "text-neutral-400 active:bg-neutral-700"}`}
+                    >
+                      {m}
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
 
