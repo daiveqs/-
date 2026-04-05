@@ -17,33 +17,29 @@ export default function LoginPage() {
       setError(false);
     } else {
       setError(true);
+      setCode("");
     }
   }
 
   if (authenticated) {
     return (
       <div className="flex items-center justify-center min-h-screen px-6">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold mb-3">MyDashboard</h1>
-          <p className="text-sm text-neutral-500">הממשק בבנייה...</p>
-        </div>
+        <p className="text-sm text-neutral-500">בבנייה...</p>
       </div>
     );
   }
 
   return (
     <div className="flex items-center justify-center min-h-screen px-6">
-      <div className="bg-neutral-900 rounded-2xl p-8 w-full max-w-sm">
-        <div className="flex justify-center mb-6">
-          <div className="bg-white p-4 rounded-full">
-            <Lock className="w-8 h-8 text-black" />
+      <div className="w-full max-w-[260px] flex flex-col items-center gap-8">
+        <div className="relative">
+          <div className="absolute -inset-4 rounded-full bg-white/5 blur-xl" />
+          <div className="relative w-16 h-16 rounded-full border border-neutral-700 flex items-center justify-center backdrop-blur-sm">
+            <Lock className="w-5 h-5 text-neutral-400" strokeWidth={1.5} />
           </div>
         </div>
 
-        <h1 className="text-2xl font-bold text-center mb-2">MyDashboard</h1>
-        <p className="text-neutral-500 text-center mb-6">הזן קוד</p>
-
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="w-full space-y-3">
           <input
             type="password"
             inputMode="numeric"
@@ -52,21 +48,22 @@ export default function LoginPage() {
               setCode(e.target.value);
               setError(false);
             }}
-            placeholder="קוד"
-            className={`w-full bg-neutral-800 text-white rounded-lg px-4 py-3 text-center text-lg outline-none transition-all
-              ${error ? "ring-2 ring-red-500" : "focus:ring-2 focus:ring-white"}`}
+            placeholder="- - - -"
+            className={`w-full bg-white/5 backdrop-blur-sm border rounded-xl px-4 py-3.5 text-center text-lg tracking-[0.5em] outline-none transition-all placeholder:tracking-[0.3em] placeholder:text-neutral-600
+              ${error
+                ? "border-red-500/50"
+                : "border-neutral-800 focus:border-neutral-600"
+              }`}
             autoFocus
           />
 
           {error && (
-            <p className="text-red-400 text-sm text-center mt-2">
-              קוד שגוי
-            </p>
+            <p className="text-red-400/70 text-xs text-center">קוד שגוי</p>
           )}
 
           <button
             type="submit"
-            className="w-full bg-white text-black font-semibold rounded-lg py-3 mt-4 transition-colors active:bg-neutral-300"
+            className="w-full bg-white text-black font-medium rounded-xl py-3.5 text-sm tracking-wide transition-all active:scale-[0.98] active:bg-neutral-200"
           >
             כניסה
           </button>
