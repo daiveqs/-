@@ -77,11 +77,11 @@ export default function EventModal({ date, editingEvent, onClose, onSave, onDele
             <label className="text-xs text-neutral-400 mb-1.5 block">שעה</label>
             <div className="flex items-center bg-neutral-900 rounded-xl overflow-hidden">
               <div className="flex-1">
-                <ScrollPicker items={HOURS} value={hour} onChange={setHour} />
+                <ScrollPicker items={MINUTES} value={minute} onChange={setMinute} />
               </div>
               <span className="text-lg text-neutral-500 px-1">:</span>
               <div className="flex-1">
-                <ScrollPicker items={MINUTES} value={minute} onChange={setMinute} />
+                <ScrollPicker items={HOURS} value={hour} onChange={setHour} />
               </div>
             </div>
           </div>
