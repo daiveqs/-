@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --background: #000000;
+  --background: #0a0a0a;
   --foreground: #ffffff;
 }
 
@@ -11,12 +11,4 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
-}
-
-input::placeholder {
-  color: #a0a0a0;
-}
-
-input::placeholder {
-  color: #555555;
 }

@@ -9,7 +9,6 @@ export default function LoginPage() {
   const [code, setCode] = useState("");
   const [error, setError] = useState(false);
   const [authenticated, setAuthenticated] = useState(false);
-  const [shaking, setShaking] = useState(false);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -18,62 +17,56 @@ export default function LoginPage() {
       setError(false);
     } else {
       setError(true);
-      setShaking(true);
-      setTimeout(() => setShaking(false), 500);
-      setCode("");
     }
   }
 
   if (authenticated) {
     return (
       <div className="flex items-center justify-center min-h-screen px-6">
-        <p className="text-sm tracking-widest uppercase opacity-40">
-          בבנייה
-        </p>
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-3">MyDashboard</h1>
+          <p className="text-sm text-neutral-500">הממשק בבנייה...</p>
+        </div>
       </div>
     );
   }
 
   return (
     <div className="flex items-center justify-center min-h-screen px-6">
-      <div className="w-full max-w-[280px]">
-        <div className="flex justify-center mb-10">
-          <div className="w-14 h-14 rounded-full border border-neutral-800 flex items-center justify-center">
-            <Lock className="w-5 h-5" strokeWidth={1.5} />
+      <div className="bg-neutral-900 rounded-2xl p-8 w-full max-w-sm">
+        <div className="flex justify-center mb-6">
+          <div className="bg-white p-4 rounded-full">
+            <Lock className="w-8 h-8 text-black" />
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className={shaking ? "animate-[shake_0.5s_ease-in-out]" : ""}>
-            <input
-              type="password"
-              inputMode="numeric"
-              value={code}
-              onChange={(e) => {
-                setCode(e.target.value);
-                setError(false);
-              }}
-              placeholder="קוד"
-              className={`w-full bg-transparent border-b py-3 text-center text-lg tracking-[0.3em] outline-none transition-all
-                ${error
-                  ? "border-white"
-                  : "border-neutral-800 focus:border-white"
-                }`}
-              autoFocus
-            />
-          </div>
+        <h1 className="text-2xl font-bold text-center mb-2">MyDashboard</h1>
+        <p className="text-neutral-500 text-center mb-6">הזן קוד</p>
+
+        <form onSubmit={handleSubmit}>
+          <input
+            type="password"
+            inputMode="numeric"
+            value={code}
+            onChange={(e) => {
+              setCode(e.target.value);
+              setError(false);
+            }}
+            placeholder="קוד"
+            className={`w-full bg-neutral-800 text-white rounded-lg px-4 py-3 text-center text-lg outline-none transition-all
+              ${error ? "ring-2 ring-red-500" : "focus:ring-2 focus:ring-white"}`}
+            autoFocus
+          />
 
           {error && (
-            <p className="text-[11px] text-center tracking-wide opacity-50">
+            <p className="text-red-400 text-sm text-center mt-2">
               קוד שגוי
             </p>
           )}
 
           <button
             type="submit"
-            className="w-full border border-neutral-800 rounded-full py-3 text-sm tracking-wide
-              active:bg-white active:text-black
-              transition-all duration-150"
+            className="w-full bg-white text-black font-semibold rounded-lg py-3 mt-4 transition-colors active:bg-neutral-300"
           >
             כניסה
           </button>
