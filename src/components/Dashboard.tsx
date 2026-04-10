@@ -27,7 +27,11 @@ export default function Dashboard() {
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
   useEffect(() => {
-    setEvents(loadEvents());
+    const all = loadEvents();
+    const today = format(new Date(), "yyyy-MM-dd");
+    const current = all.filter((e) => e.date >= today);
+    setEvents(current);
+    saveEvents(current);
   }, []);
 
   function addEvent(event: { title: string; description: string; date: string; time: string }) {
