@@ -7,11 +7,10 @@ import { Plus, Pencil, Trash2, Menu } from "lucide-react";
 import Calendar, { CalendarEvent } from "./Calendar";
 import EventModal from "./EventModal";
 
-type TabId = "general" | "training" | "finance";
+type TabId = "general" | "finance";
 
 const TABS: { id: TabId; label: string }[] = [
   { id: "general", label: "כללי" },
-  { id: "training", label: "אימונים" },
   { id: "finance", label: "כספים" },
 ];
 
@@ -208,12 +207,6 @@ export default function Dashboard() {
                 </div>
               )}
             </div>
-          </div>
-        )}
-
-        {activeTab === "training" && (
-          <div className="flex items-center justify-center h-64">
-            <p className="text-sm text-neutral-500">בקרוב</p>
           </div>
         )}
 
